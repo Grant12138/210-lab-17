@@ -9,26 +9,22 @@ struct Node
     Node* next;
 
     Node() : value(0.0), next(nullptr) {}
-    ~Node()
-    {
-        delete next;
-        next = nullptr;
-    }
+    ~Node() {} // Destructor intentionally left empty to prevent recursive deletion
 };
 
 void createList(Node* &);
-void output(const Node*);
-void traverse(Node* &, Node* &);
+void output(Node*);
+void traverse(Node* &, Node* &, int const);
 int getEntry(const string, Node*);
-void insertNode(Node*, Node*, Node*);
-void deleteNode(Node*, Node*, Node*);
+void insertNode(Node*, Node*, Node* &);
+void deleteNode(Node* &, Node* &, Node* &);
 void deleteList(Node*);
 
-int main() {
+int main()
+{
     Node *head = nullptr;
-    int count = 0;
 
-    // create a linked list of size SIZE with random numbers 0-99
+    // create a linked list of SIZE with random numbers 0-99
     createList(head);
     output(head);
 
@@ -62,12 +58,12 @@ void createList(Node* &head)
         { // if this is the first node, it's the new head
             head = newVal;
             newVal->next = nullptr;
-            newVal->value = tmp_val;
+            newVal->value = static_cast<float>(tmp_val);
         }
         else
         { // its a second or subsequent node; place at the head
             newVal->next = head;
-            newVal->value = tmp_val;
+            newVal->value = static_cast<float>(tmp_val);
             head = newVal;
         }
     }
@@ -80,7 +76,7 @@ void output(Node* hd) {
         return;
     }
     int count = 1;
-    Node* current = hd;
+    const Node* current = hd;
     while (current != nullptr)
     {
         cout << "[" << count++ << "] " << current->value << endl;
@@ -128,7 +124,7 @@ int getEntry(const string message, Node* head)
     return theEntry;
 }
 
-void deleteNode(Node* current, Node* prev, Node* head)
+void deleteNode(Node* &current, Node* &prev, Node* &head)
 {
     string message = "Which node to delete? ";
     int theEntry = getEntry(message, head);
@@ -140,21 +136,28 @@ void deleteNode(Node* current, Node* prev, Node* head)
         cout << "Empty list - nothing to delete\n";
     else
     {
-        prev->next = current->next;
+        if (prev == nullptr) // Deleting the head node
+        {
+            head = current->next;
+        }
+        else
+        {
+            prev->next = current->next;
+        }
         delete current;
         current = nullptr;
     }
     output(head);
 }
 
-void insertNode(Node* current, Node* prev, Node* head)
+void insertNode(Node* current, Node* prev, Node* &head)
 {
     string message = "After which node to insert 10000? ";
     int theEntry = getEntry(message, head);
 
     traverse(current, prev, theEntry);
     Node* newNode = new Node;
-    newNode->value = 1000.0;
+    newNode->value = 10000.0;
     newNode->next = current->next;
     current->next = newNode;
 }
