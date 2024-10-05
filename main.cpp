@@ -67,13 +67,12 @@ int main() {
 
     // traverse that many times and delete that node
     Node* current = head;
-    Node *prev = nullptr;
-    for (int i = 0; i < (theEntry - 1); i++)
-        if (i == 0)
+    Node* prev = nullptr;
+    for (int i = 1; i <= theEntry; i++)
+        if (i != 1)
+        {
+            prev = current;
             current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
         }
     // at this point, delete current and reroute pointers
     if (current) {  // checks for current to be valid before deleting the node
