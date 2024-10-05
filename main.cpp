@@ -44,17 +44,31 @@ int main() {
     output(head);
 
     // deleting a node
-    Node * current = head;
     cout << "Which node to delete? " << endl;
     output(head);
-    int entry;
-    cout << "Choice --> ";
-    cin >> entry;
+    int theEntry;
+    string entry;
+    do
+    {
+        cout << "Choice --> ";
+        cin >> entry;
+        cin.ignore(1000, '\n');
+        try
+        {
+            theEntry = stoi(entry);
+        }
+        catch (invalid_argument &)
+        {
+            cout << "Error: You did not enter a valid entry.\n";
+            return 1;
+        }
+    }
+    while (theEntry <= 0);
 
     // traverse that many times and delete that node
-    current = head;
-    Node *prev = head;
-    for (int i = 0; i < (entry-1); i++)
+    Node* current = head;
+    Node *prev = nullptr;
+    for (int i = 0; i < (theEntry - 1); i++)
         if (i == 0)
             current = current->next;
         else {
@@ -109,14 +123,16 @@ int main() {
     return 0;
 }
 
-void output(Node * hd) {
-    if (!hd) {
+void output(Node* hd) {
+    if (hd == nullptr)
+    {
         cout << "Empty list.\n";
         return;
     }
     int count = 1;
-    Node * current = hd;
-    while (current) {
+    Node* current = hd;
+    while (current != nullptr)
+    {
         cout << "[" << count++ << "] " << current->value << endl;
         current = current->next;
     }
