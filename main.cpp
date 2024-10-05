@@ -16,19 +16,47 @@ struct Node
     }
 };
 
+void createList(Node* &);
 void output(const Node*);
-void deleteNode(Node* &, Node* &, Node* &);
 void traverse(Node* &, Node* &);
+int getEntry(const string, Node*);
+void insertNode(Node*, Node*, Node*);
+void deleteNode(Node*, Node*, Node*);
+void deleteList(Node*);
 
 int main() {
     Node *head = nullptr;
     int count = 0;
 
     // create a linked list of size SIZE with random numbers 0-99
-    for (int i = 0; i < SIZE; i++) {
+    createList(head);
+    output(head);
+
+    Node* current = head;
+    Node* prev = nullptr;
+    // deleting a node
+    deleteNode(current, prev, head);
+
+    // insert a node
+    insertNode(current, prev, head);
+    output(head);
+
+    // deleting the linked list
+    deleteList(head);
+    output(head);
+
+    head = nullptr;
+
+    return 0;
+}
+
+void createList(Node* &head)
+{
+    for (int i = 0; i < SIZE; i++)
+    {
         int tmp_val = rand() % 100;
         Node *newVal = new Node;
-        
+
         // adds node at head
         if (head == nullptr)
         { // if this is the first node, it's the new head
@@ -43,64 +71,6 @@ int main() {
             head = newVal;
         }
     }
-    output(head);
-
-    Node* current = head;
-    Node* prev = nullptr;
-    // deleting a node
-    deleteNode(current, prev, head);
-    // traverse that many times and delete that node
-
-
-    // at this point, delete current and reroute pointers
-    if (current == nullptr) // checks for current to be valid before deleting the node
-        cout << "Empty list - nothing to delete\n";
-    else
-    {
-        prev->next = current->next;
-        delete current;
-        current = nullptr;
-    }
-    output(head);
-
-    // insert a node
-    current = head;
-    cout << "After which node to insert 10000? " << endl;
-    count = 1;
-    while (current) {
-        cout << "[" << count++ << "] " << current->value << endl;
-        current = current->next;
-    }
-    cout << "Choice --> ";
-    cin >> entry;
-
-    current = head;
-    prev = head;
-    for (int i = 0; i < (entry); i++)
-        if (i == 0)
-            current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
-        }
-    //at this point, insert a node between prev and current
-    Node * newnode = new Node;
-    newnode->value = 10000;
-    newnode->next = current;
-    prev->next = newnode;
-    output(head);
-
-    // deleting the linked list
-    current = head;
-    while (current) {
-        head = current->next;
-        delete current;
-        current = head;
-    }
-    head = nullptr;
-    output(head);
-
-    return 0;
 }
 
 void output(Node* hd) {
@@ -129,9 +99,9 @@ void traverse(Node* &current, Node* &prev, int const theEntry)
         }
 }
 
-void deleteNode(Node* &current, Node* &prev, Node* head)
+int getEntry(const string message, Node* head)
 {
-    cout << "Which node to delete? " << endl;
+    cout << message << '\n';
     output(head);
     int theEntry;
     string entry;
@@ -140,22 +110,62 @@ void deleteNode(Node* &current, Node* &prev, Node* head)
         cout << "Choice --> ";
         cin >> entry;
         cin.ignore(1000, '\n');
-        try
+        while (true)
         {
-            theEntry = stoi(entry);
-        }
-        catch (invalid_argument &)
-        {
-            cout << "Error: You did not enter a valid entry.\n";
-            return;
+            try
+            {
+                theEntry = stoi(entry);
+                break;
+            }
+            catch (invalid_argument &)
+            {
+                cout << "Error: You did not enter a valid entry.\n";
+            }
         }
     }
     while (theEntry <= 0);
 
-    traverse(current, prev, theEntry);
-
-    prev->next = current->next;
-    delete current;
-    current = nullptr;
+    return theEntry;
 }
 
+void deleteNode(Node* current, Node* prev, Node* head)
+{
+    string message = "Which node to delete? ";
+    int theEntry = getEntry(message, head);
+
+    traverse(current, prev, theEntry);
+
+    // at this point, delete current and reroute pointers
+    if (current == nullptr) // checks for current to be valid before deleting the node
+        cout << "Empty list - nothing to delete\n";
+    else
+    {
+        prev->next = current->next;
+        delete current;
+        current = nullptr;
+    }
+    output(head);
+}
+
+void insertNode(Node* current, Node* prev, Node* head)
+{
+    string message = "After which node to insert 10000? ";
+    int theEntry = getEntry(message, head);
+
+    traverse(current, prev, theEntry);
+    Node* newNode = new Node;
+    newNode->value = 1000.0;
+    newNode->next = current->next;
+    current->next = newNode;
+}
+
+void deleteList(Node* head)
+{
+    Node* current;
+    while (head != nullptr)
+    {
+        current = head;
+        head = current->next;
+        delete current;
+    }
+}
