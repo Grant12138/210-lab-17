@@ -68,7 +68,8 @@ void createList(Node* &head)
     }
 }
 
-void output(Node* hd) {
+void output(Node* hd)
+{
     if (hd == nullptr)
     {
         cout << "Empty list.\n";
