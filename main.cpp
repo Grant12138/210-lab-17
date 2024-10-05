@@ -1,3 +1,8 @@
+/***************************************************************************
+* COMSC-210 | Lab 17 | Grant Luo
+* Editor: CLion
+* Compiler: Apple clang version 16.0.0
+*/
 #include <iostream>
 using namespace std;
 
@@ -12,16 +17,20 @@ struct Node
     ~Node() {} // Destructor intentionally left empty to prevent recursive deletion
 };
 
+// Function Prototypes
 void createList(Node* &);
 void output(Node*);
 void traverse(Node* &, Node* &, int const);
 int getEntry(const string, Node*);
 void insertNode(Node* &);
 void deleteNode(Node* &);
-void deleteList(Node*);
+void deleteList(Node* &);
+void print_id(string const& lab_desc);
 
 int main()
 {
+    print_id("Lab 17: Modularize the Linked List Code");
+
     Node *head = nullptr;
 
     // create a linked list of SIZE with random numbers 0-99
@@ -45,6 +54,13 @@ int main()
     return 0;
 }
 
+/******************************************************************************************************************
+ * FUNCTION: creates a linked list of SIZE consisting of random float values
+ *
+ * @param head
+ *
+ * @return NONE;
+ */
 void createList(Node* &head)
 {
     for (int i = 0; i < SIZE; i++)
@@ -68,6 +84,13 @@ void createList(Node* &head)
     }
 }
 
+/*********************************************************
+ * FUNCTION: displays the content of the linked list
+ *
+ * @param hd
+ *
+ * @return NONE;
+ */
 void output(Node* hd)
 {
     if (hd == nullptr)
@@ -85,6 +108,15 @@ void output(Node* hd)
     cout << endl;
 }
 
+/**********************************************************************
+ * FUNCTION: reroutes the pointers to the entry position for deletion/insertion
+ *
+ * @param current
+ * @param prev
+ * @param theEntry
+ *
+ * @return NONE;
+ */
 void traverse(Node* &current, Node* &prev, int const theEntry)
 {
     for (int i = 1; i <= theEntry; i++)
@@ -95,35 +127,50 @@ void traverse(Node* &current, Node* &prev, int const theEntry)
         }
 }
 
+/********************************************************
+ * FUNCTION: asks users for the entry position with error handling
+ * @param message
+ * @param head
+ *
+ * @return NONE;
+ */
 int getEntry(const string message, Node* head)
 {
     cout << message << '\n';
     output(head);
     int theEntry;
     string entry;
-    do
+
+    while (true)
     {
-        cout << "Choice --> ";
-        cin >> entry;
-        cin.ignore(1000, '\n');
-        while (true)
+        try
         {
-            try
-            {
-                theEntry = stoi(entry);
+            cout << "Choice --> ";
+            cin >> entry;
+            cin.ignore(1000, '\n');
+            theEntry = stoi(entry);
+
+            if (theEntry > 0)
                 break;
-            }
-            catch (invalid_argument &)
-            {
-                cout << "Error: You did not enter a valid entry.\n";
-            }
+            else
+                cout << "Please enter a positive number\n";
+        }
+        catch (invalid_argument &)
+        {
+            cout << "Error: You did not enter a valid entry.\n";
         }
     }
-    while (theEntry <= 0);
 
     return theEntry;
 }
 
+/***********************************************************
+ * FUNCTION: deletes the node at the entry position
+ *
+ * @param head
+ *
+ * @return NONE;
+ */
 void deleteNode(Node* &head)
 {
     Node* current = head;
@@ -152,6 +199,13 @@ void deleteNode(Node* &head)
     }
 }
 
+/***********************************************************************
+ * FUNCTION: inserts a new node right after the entry position
+ *
+ * @param head
+ *
+ * @return NONE;
+ */
 void insertNode(Node* &head)
 {
     Node* current = head;
@@ -167,7 +221,14 @@ void insertNode(Node* &head)
     current->next = newNode;
 }
 
-void deleteList(Node* head)
+/***********************************************************
+ * FUNCTION: deletes the entire linked list to free up the allocated memory in heap
+ *
+ * @param head
+ *
+ * @return NONE;
+ */
+void deleteList(Node* &head)
 {
     Node* current;
     while (head != nullptr)
@@ -176,4 +237,13 @@ void deleteList(Node* head)
         head = current->next;
         delete current;
     }
+}
+
+void print_id(string const& lab_desc)
+{
+    cout << "\nCOMSC210 | Grant Luo | " << lab_desc << "\n";
+    cout << "Editor: CLion\n";
+    cout << "Compiler: Apple clang version 16.0.0\n";
+    cout << "File: " << __FILE__ << "\n";
+    cout << "Compiled: " << __DATE__ << " at " << __TIME__ << "\n\n";
 }
