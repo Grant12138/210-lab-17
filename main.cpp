@@ -16,7 +16,9 @@ struct Node
     }
 };
 
-void output(Node *);
+void output(const Node*);
+void deleteNode(Node* &, Node* &, Node* &);
+void traverse(Node* &, Node* &);
 
 int main() {
     Node *head = nullptr;
@@ -43,39 +45,18 @@ int main() {
     }
     output(head);
 
-    // deleting a node
-    cout << "Which node to delete? " << endl;
-    output(head);
-    int theEntry;
-    string entry;
-    do
-    {
-        cout << "Choice --> ";
-        cin >> entry;
-        cin.ignore(1000, '\n');
-        try
-        {
-            theEntry = stoi(entry);
-        }
-        catch (invalid_argument &)
-        {
-            cout << "Error: You did not enter a valid entry.\n";
-            return 1;
-        }
-    }
-    while (theEntry <= 0);
-
-    // traverse that many times and delete that node
     Node* current = head;
     Node* prev = nullptr;
-    for (int i = 1; i <= theEntry; i++)
-        if (i != 1)
-        {
-            prev = current;
-            current = current->next;
-        }
+    // deleting a node
+    deleteNode(current, prev, head);
+    // traverse that many times and delete that node
+
+
     // at this point, delete current and reroute pointers
-    if (current) {  // checks for current to be valid before deleting the node
+    if (current == nullptr) // checks for current to be valid before deleting the node
+        cout << "Empty list - nothing to delete\n";
+    else
+    {
         prev->next = current->next;
         delete current;
         current = nullptr;
@@ -137,3 +118,44 @@ void output(Node* hd) {
     }
     cout << endl;
 }
+
+void traverse(Node* &current, Node* &prev, int const theEntry)
+{
+    for (int i = 1; i <= theEntry; i++)
+        if (i != 1)
+        {
+            prev = current;
+            current = current->next;
+        }
+}
+
+void deleteNode(Node* &current, Node* &prev, Node* head)
+{
+    cout << "Which node to delete? " << endl;
+    output(head);
+    int theEntry;
+    string entry;
+    do
+    {
+        cout << "Choice --> ";
+        cin >> entry;
+        cin.ignore(1000, '\n');
+        try
+        {
+            theEntry = stoi(entry);
+        }
+        catch (invalid_argument &)
+        {
+            cout << "Error: You did not enter a valid entry.\n";
+            return;
+        }
+    }
+    while (theEntry <= 0);
+
+    traverse(current, prev, theEntry);
+
+    prev->next = current->next;
+    delete current;
+    current = nullptr;
+}
+
