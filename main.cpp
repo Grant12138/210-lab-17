@@ -3,9 +3,17 @@ using namespace std;
 
 const int SIZE = 7;  
 
-struct Node {
+struct Node
+{
     float value;
-    Node *next;
+    Node* next;
+
+    Node() : value(0.0), next(nullptr) {}
+    ~Node()
+    {
+        delete next;
+        next = nullptr;
+    }
 };
 
 void output(Node *);
@@ -20,12 +28,14 @@ int main() {
         Node *newVal = new Node;
         
         // adds node at head
-        if (!head) { // if this is the first node, it's the new head
+        if (head == nullptr)
+        { // if this is the first node, it's the new head
             head = newVal;
             newVal->next = nullptr;
             newVal->value = tmp_val;
         }
-        else { // its a second or subsequent node; place at the head
+        else
+        { // its a second or subsequent node; place at the head
             newVal->next = head;
             newVal->value = tmp_val;
             head = newVal;
