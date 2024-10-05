@@ -16,8 +16,8 @@ void createList(Node* &);
 void output(Node*);
 void traverse(Node* &, Node* &, int const);
 int getEntry(const string, Node*);
-void insertNode(Node*, Node*, Node* &);
-void deleteNode(Node* &, Node* &, Node* &);
+void insertNode(Node* &);
+void deleteNode(Node* &);
 void deleteList(Node*);
 
 int main()
@@ -28,13 +28,12 @@ int main()
     createList(head);
     output(head);
 
-    Node* current = head;
-    Node* prev = nullptr;
     // deleting a node
-    deleteNode(current, prev, head);
+    deleteNode( head);
+    output(head);
 
     // insert a node
-    insertNode(current, prev, head);
+    insertNode(head);
     output(head);
 
     // deleting the linked list
@@ -124,8 +123,11 @@ int getEntry(const string message, Node* head)
     return theEntry;
 }
 
-void deleteNode(Node* &current, Node* &prev, Node* &head)
+void deleteNode(Node* &head)
 {
+    Node* current = head;
+    Node* prev = nullptr;
+
     string message = "Which node to delete? ";
     int theEntry = getEntry(message, head);
 
@@ -147,11 +149,13 @@ void deleteNode(Node* &current, Node* &prev, Node* &head)
         delete current;
         current = nullptr;
     }
-    output(head);
 }
 
-void insertNode(Node* current, Node* prev, Node* &head)
+void insertNode(Node* &head)
 {
+    Node* current = head;
+    Node* prev = nullptr;
+
     string message = "After which node to insert 10000? ";
     int theEntry = getEntry(message, head);
 
